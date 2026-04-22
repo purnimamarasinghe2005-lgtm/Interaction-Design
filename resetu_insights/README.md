@@ -1,6 +1,5 @@
-# ResetU Insights Backend Prototype (Professional Version)
+# ResetU Insights Backend Prototype
 
-This version is designed to look more academic and transparent.
 
 ## What it does
 - Reads raw check-in answers from `checkins_raw.csv`
@@ -23,5 +22,5 @@ python3 insights_backend.py
 ```
 
 ## Why the JSON file already contains results
-`insights_output.json` is not input data.
+`insights_output.json` 
 It is the generated output file created after the calculations are performed.
