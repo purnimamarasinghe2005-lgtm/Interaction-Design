@@ -14,6 +14,7 @@ DATA_FILE = Path("checkins_raw.csv")
 OUTPUT_FILE = Path("insights_output.json")
 DATE_FORMAT = "%Y-%m-%d"
 
+# Raw check-in answers are converted into simple numeric scores.
 STRESS_SCORES: Dict[str, int] = {
     "Very calm": 3,
     "A bit stressed": 2,
@@ -141,6 +142,7 @@ def calculate_daily_insight(checkin: CheckIn) -> DailyInsight:
     screen_time_score = score_screen_time(checkin.screen_time_hours)
     notifications_score = score_notifications(checkin.notifications)
 
+    # Five factors are combined and scaled to produce a daily wellbeing score out of 10.
     total_score = (
         stress_score
         + focus_score
@@ -177,6 +179,7 @@ def calculate_peak_notifications_day(daily: List[DailyInsight]) -> str:
 
 
 def build_output(daily: List[DailyInsight]) -> dict:
+    # Weekly summary values are calculated from the daily insight data.
     overall_wellbeing = round(mean(item.wellbeing_score for item in daily), 1)
     avg_screen_time = round(mean(item.screen_time_hours for item in daily), 1)
     peak_notifications_value = max(item.notifications for item in daily)
@@ -235,6 +238,7 @@ def build_output(daily: List[DailyInsight]) -> dict:
 
 
 def save_output(path: Path, payload: dict) -> None:
+    # Save the calculated results so they can be reused by a front-end or dashboard later.
     with path.open("w", encoding="utf-8") as file:
         json.dump(payload, file, indent=4)
 
@@ -255,7 +259,7 @@ def main() -> None:
     print("Best focus time:", summary["best_focus_time"])
     print("Peak notifications:", summary["peak_notifications"])
     print("Reflection:", summary["reflection"])
-    print(f"\nSaved detailed output to {OUTPUT_FILE}")
+    print(f"\\nSaved detailed output to {OUTPUT_FILE}")
 
 
 if __name__ == "__main__":
